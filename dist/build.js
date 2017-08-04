@@ -3454,16 +3454,14 @@ exports.default = {
 
                 var connectionHook = this.$options.events;
 
-                console.log('hook', this.$options[connectionHook]);
-
                 this.$options[connectionHook] = new Proxy({}, {
                     set: function set(target, key, value) {
-                        _emitter2.default.addEventHook(connection, key, value, _this);
+                        _emitter2.default.addEventHook(key, value, _this);
                         target[key] = value;
                         return true;
                     },
                     deleteProperty: function deleteProperty(target, key) {
-                        _emitter2.default.removeListener(connection, key, _this.$options[connectionHook][key], _this);
+                        _emitter2.default.removeListener(key, _this.$options[connectionHook][key], _this);
                         delete target.key;
                         return true;
                     }
@@ -3533,9 +3531,12 @@ var Connection = function Connection(connection) {
 
     this.connection.on('message', function (data) {
         if (data == '#1') return;
-
         var payload = JSON.parse(data);
-        console.log(payload);
+
+        if (payload.event && payload.event == '#publish') {
+            _emitter2.default.emit(payload.data.data.event, payload.data.data.data);
+        }
+
         _emitter2.default.emit((0, _utils.formatInternal)(payload.event), payload.data);
     });
 };
