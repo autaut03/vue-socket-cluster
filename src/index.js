@@ -10,16 +10,14 @@ export default {
 	        created(){
                 let connectionHook = this.$options.events;
 
-                console.log('hook', this.$options[connectionHook]);
-
                 this.$options[connectionHook] = new Proxy({}, {
                     set: (target, key, value) => {
-                        Emitter.addEventHook(connection, key, value, this);
+                        Emitter.addEventHook(key, value, this);
                         target[key] = value;
                         return true;
                     },
                     deleteProperty: (target, key) => {
-                        Emitter.removeListener(connection, key, this.$options[connectionHook][key], this);
+                        Emitter.removeListener(key, this.$options[connectionHook][key], this);
                         delete target.key;
                         return true;
                     }
