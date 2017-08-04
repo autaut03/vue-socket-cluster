@@ -14,9 +14,12 @@ class Connection {
 
         this.connection.on('message', data => {
             if(data == '#1') return;
-
             let payload = JSON.parse(data);
-            console.log(payload);
+
+            if(payload.event && payload.event == '#publish') {
+                Emitter.emit(payload.data.data.event, payload.data.data.data);
+            }
+
             Emitter.emit(formatInternal(payload.event) , payload.data);
         });
     }
