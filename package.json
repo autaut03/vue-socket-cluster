@@ -1,14 +1,14 @@
 {
   "name": "vue-socket-cluster",
-  "version": "1.0.1",
-  "description": "Socket cluster vuejs wrapper",
+  "version": "1.0.0",
+  "description": "Socket cluster wrapper for VueJS",
   "main": "dist/build.js",
   "scripts": {
     "build": "webpack --progress --hide-modules"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nigeltiany/vue-socket-cluster.git"
+    "url": "git+https://github.com/autaut03/vue-socket-cluster.git"
   },
   "keywords": [
     "VueJS",
@@ -20,7 +20,7 @@
     "vuex",
     "realtime"
   ],
-  "author": "Nigel Tiany",
+  "author": "Nigel Tiany (original), Alex Wells",
   "license": "MIT",
   "dependencies": {
     "socketcluster-client": "^6.1.1"

@@ -1,24 +1,25 @@
-import socketCluster from 'socketcluster-client'
-import { snakeToCamel } from './utils'
-import defaultSocketEvents from './defaultSocketEvents'
-import Emitter from './emitter'
+import socketCluster from 'socketcluster-client';
+import defaultSocketEvents from './defaultSocketEvents';
+import Emitter from './emitter';
+import { formatInternal } from './utils';
 
 class Connection {
     constructor(connection) {
-        this.connection = socketCluster.connect(connection)
-        defaultSocketEvents.map((event) => {
-            this.connection.on(event, (payload) => {
-                Emitter.emit(connection, event, payload)
-            })
-        })
+        this.connection = socketCluster.connect(connection);
+        defaultSocketEvents.map(event => {
+            this.connection.on(event, payload => {
+                Emitter.emit(formatInternal(event), payload);
+            });
+        });
 
-        this.connection.on('message', (data) => {
-            if(data !== '#1') {
-                let payload = JSON.parse(data)
-                Emitter.emit(connection, payload.event ? snakeToCamel(payload.event) : 'message', payload.data);
-            }
-        })
+        this.connection.on('message', data => {
+            if(data == '#1') return;
+
+            let payload = JSON.parse(data);
+            console.log(payload);
+            Emitter.emit(formatInternal(payload.event) , payload.data);
+        });
     }
 }
 
-export default Connection
+export default Connection;
