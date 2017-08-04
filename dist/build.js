@@ -3533,11 +3533,16 @@ var Connection = function Connection(connection) {
         if (data == '#1') return;
         var payload = JSON.parse(data);
 
-        if (payload.event && payload.event == '#publish') {
+        if (!payload.event) return;
+
+        if (payload.event == '#publish') {
             _emitter2.default.emit(payload.data.data.event, payload.data.data.data);
+            return;
         }
 
-        _emitter2.default.emit((0, _utils.formatInternal)(payload.event), payload.data);
+        if (payload.event.startsWith('#')) return;
+
+        _emitter2.default.emit(payload.event, payload.data);
     });
 };
 

@@ -13,14 +13,22 @@ class Connection {
         });
 
         this.connection.on('message', data => {
-            if(data == '#1') return;
+            if(data == '#1') 
+				return;
             let payload = JSON.parse(data);
-
-            if(payload.event && payload.event == '#publish') {
+			
+			if(!payload.event)
+				return;
+			
+            if(payload.event == '#publish') {
                 Emitter.emit(payload.data.data.event, payload.data.data.data);
+				return;
             }
+			
+			if(payload.event.startsWith('#'))
+				return;
 
-            Emitter.emit(formatInternal(payload.event) , payload.data);
+            Emitter.emit(payload.event, payload.data);
         });
     }
 }
